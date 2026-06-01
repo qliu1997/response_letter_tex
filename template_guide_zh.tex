@@ -1,0 +1,231 @@
+% ============================================================
+%  Response Letter Template Guide (Chinese Demo Version)
+%  This file intentionally reuses the same response-letter style
+%  as main.tex, so that users can learn the template by reading
+%  a rendered example in the exact same layout.
+% ============================================================
+\documentclass[11pt,a4paper,fontset=none]{ctexart}
+
+% ---------- Page geometry ----------
+\usepackage[top=2.3cm, bottom=2.3cm, left=3.17cm, right=3.17cm]{geometry}
+
+% ---------- Fonts ----------
+\setCJKmainfont[AutoFakeSlant]{Songti SC}
+\setCJKmonofont{Songti SC}
+\setmainfont{Times New Roman}
+
+% ---------- Line spacing ----------
+\usepackage{setspace}
+\singlespacing
+
+% ---------- Paragraph formatting ----------
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\raggedbottom
+
+% ---------- Page number ----------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ---------- Colors ----------
+\usepackage{xcolor}
+\definecolor{replyblue}{RGB}{0,102,255}
+\definecolor{refcolor}{RGB}{0,102,255}
+
+% ---------- Section / Subsection formatting ----------
+\usepackage{titlesec}
+\titleformat{\section}
+  {\normalfont\fontsize{11pt}{13.2pt}\bfseries}
+  {}{0pt}{}
+\titlespacing*{\section}{0pt}{13.2pt}{6.6pt}
+
+\titleformat{\subsection}
+  {\normalfont\fontsize{11pt}{13.2pt}\itshape}
+  {}{0pt}{}
+\titlespacing*{\subsection}{0pt}{13.2pt}{13.2pt}
+
+% ---------- Reference system ----------
+% \defref{label}{display-text}  — define a reference
+% \rcite{label}                 — cite it (bold + colored)
+% WARNING: \rcite now produces a FATAL ERROR if the reference is undefined
+\makeatletter
+\newwrite\refcheck@stream
+\immediate\openout\refcheck@stream=\jobname.refcheck
+\newcommand{\defref}[2]{%
+  \expandafter\gdef\csname ref@#1\endcsname{#2}%
+}
+\DeclareRobustCommand{\rcite}[1]{%
+  \ifcsname ref@#1\endcsname
+    \immediate\write\refcheck@stream{Defined: #1}%
+    \textbf{\csname ref@#1\endcsname}%
+  \else
+    \immediate\write\refcheck@stream{UNDEFINED REF: #1}%
+    \PackageError{response letter}{Undefined reference '#1' — add \string\defref\{#1\}\{...\} to reference table}{}%
+  \fi
+}
+\makeatother
+
+% ---------- Reply environment ----------
+\newenvironment{reply}{%
+  \par\vspace{2pt}%
+  \color{replyblue}%
+  \noindent\textbf{Reply:} %
+  \ignorespaces
+}{\par\vspace{2pt}}
+
+% ---------- Math / symbol helpers ----------
+\usepackage{amsmath,amssymb}
+
+\begin{document}
+
+% ============================================================
+%  REFERENCE TABLE
+%  In real use, update these labels whenever the manuscript pages
+%  or section numbers change.
+% ============================================================
+\defref{guide:refs}{本文档“如何维护引用表”部分}
+\defref{guide:body}{本文档“如何填写正文”部分}
+\defref{guide:style}{本文档“如何调整样式”部分}
+\defref{guide:compile}{本文档“如何编译”部分}
+
+模板说明（示范版）
+
+本文件不是普通说明书，而是刻意沿用 \texttt{main.tex} 的 response 模版版式来介绍该模版的使用方式。这样别人打开 PDF 后，既能直接看到最终排版效果，也能顺着示范结构快速替换成自己的审稿回复内容。
+
+\section*{一、如何理解这个模版的结构}
+
+\subsection*{1. 这个模版最适合拿来做什么？}
+
+\begin{reply}
+这个模版适合用于期刊或会议返修阶段的 response letter，也就是逐条对应审稿意见、逐条给出回复的文档。它的核心特点是：页面版式稳定、问题与回复层次清楚、并且可以用 \rcite{guide:refs} 那样的统一引用方式，集中维护“修改位置”“页码”“章节号”等信息。
+\end{reply}
+
+\subsection*{2. 模版的基本组织顺序是什么？}
+
+\begin{reply}
+推荐保持以下顺序不变：先在顶部维护引用表；再写开头致谢；随后按 Reviewer 分节；每位 Reviewer 下按 comment 编号写 \texttt{\textbackslash subsection*}；每条意见下面用 \texttt{reply} 环境填写回复；最后写结尾致谢和署名。实际写作时，你通常只需要修改正文内容，不需要频繁改动导言区。
+\end{reply}
+
+\subsection*{3. 为什么要保留顶部的引用表？}
+
+\begin{reply}
+这是这个模版最实用的部分之一。你可以像下面这样，在文档顶部集中定义论文中的对应位置：
+
+\texttt{\textbackslash defref\{sec:method\}\{Section III, Page 4--5\}}
+
+正文里再通过 \texttt{\textbackslash rcite\{sec:method\}} 调用。这样一来，如果论文返修后页码变化，你只需要在顶部改一次，不需要在几十条回复里逐个手工改页码。这也是官方模板常见的“集中维护、局部调用”思路。
+\end{reply}
+
+\section*{二、如何填写正文内容}
+
+\subsection*{1. 每条审稿意见应该放在哪里？}
+
+\begin{reply}
+每位审稿人建议放在一个 \texttt{\textbackslash section*} 下面，例如：
+
+\texttt{\textbackslash section*\{Response to Reviewer \#1\}}
+
+该审稿人的每条意见放在一个 \texttt{\textbackslash subsection*} 里，通常直接把审稿意见原文贴进去即可。这样做的好处是：审稿人原话、你的回复、以及结构编号三者天然对齐，阅读体验会非常清楚。对应写法可参考 \rcite{guide:body}。
+\end{reply}
+
+\subsection*{2. 回复正文应该怎么写？}
+
+\begin{reply}
+每条回复使用下面的结构：
+
+\texttt{\textbackslash begin\{reply\}}\\
+\texttt{Thank you for your valuable comment. ...}\\
+\texttt{\textbackslash end\{reply\}}
+
+其中 \texttt{reply} 环境会自动把正文显示为蓝色，并在开头加粗显示 ``Reply:''。建议每条回复尽量包含三部分：先感谢或确认问题；再说明你做了什么修改；最后指出修改在论文中的具体位置，例如“已补充于 \texttt{\textbackslash rcite\{sec:ablation\}}”。
+\end{reply}
+
+\subsection*{3. 开头和结尾哪些地方最常改？}
+
+\begin{reply}
+最常改的有三处。第一，开头的总致谢段；第二，每位 Reviewer 的标题和条目顺序；第三，结尾落款。结尾通常是：
+
+\texttt{\textbackslash noindent Sincerely,}\\
+\texttt{\textbackslash noindent The Authors}
+
+如果需要替换成具体作者名、实验室名或者通信作者名，直接修改这一段即可。
+\end{reply}
+
+\subsection*{4. 如果我要把它当成“空白官方模板”发给别人，应该怎么处理？}
+
+\begin{reply}
+最直接的做法是保留导言区、保留引用表机制、保留 Reviewer/Comment/Reply 的骨架，然后把真实回复内容换成提示性占位文本。例如将某条意见写成“在此粘贴审稿意见原文”，将回复写成“在此填写回复，并注明修改位置”。这样别人拿到后既能保留版式，又知道每一块该填什么。
+\end{reply}
+
+\section*{三、如何调整样式而不破坏模版}
+
+\subsection*{1. 页码、页边距和字体现在是怎么设置的？}
+
+\begin{reply}
+这个示范文件与 \texttt{main.tex} 使用同一套核心设置：A4 纸张，11pt，中文宋体、英文 Times New Roman，单倍行距，页码位于页面底部居中。页码由 \texttt{fancyhdr} 控制；页边距由 \texttt{geometry} 控制；标题格式由 \texttt{titlesec} 控制。若需微调，优先在导言区集中修改，不建议在正文里零散插入局部格式命令。相关思路可参照 \rcite{guide:style}。
+\end{reply}
+
+\subsection*{2. 我能不能改回复颜色，或者改成黑白版？}
+
+\begin{reply}
+可以。当前回复正文颜色由
+
+\texttt{\textbackslash definecolor\{replyblue\}\{RGB\}\{0,102,255\}}
+
+控制，引用颜色由
+
+\texttt{\textbackslash definecolor\{refcolor\}\{RGB\}\{0,102,255\}}
+
+控制。如果你想改成纯黑色，只需要把这两个颜色定义改成黑色，或者直接把 \texttt{reply} 环境中的颜色命令去掉即可。
+\end{reply}
+
+\subsection*{3. 如果某条回复特别长，分页不太好看怎么办？}
+
+\begin{reply}
+优先做三件事。第一，把超长回复拆成两到三个自然段。第二，把“背景介绍”压缩，只保留与该条意见直接相关的解释。第三，最后才考虑微调标题前后间距或页边距。通常只要段落层次清楚，这个模版在长 response 场景下也能保持比较稳定的阅读体验。
+\end{reply}
+
+\section*{四、如何编译与交付}
+
+\subsection*{1. 应该用什么方式编译？}
+
+\begin{reply}
+推荐使用 XeLaTeX，因为模版显式设置了中英文字体。最常用的命令是：
+
+\texttt{xelatex main.tex}
+
+如果页码引用、交叉引用或目录信息有变化，建议连续编译两次。对于本说明文档本身，也同样建议使用 XeLaTeX。对应建议可见 \rcite{guide:compile}。
+\end{reply}
+
+\subsection*{2. 交给别人时，最少需要哪些文件？}
+
+\begin{reply}
+如果只是分享模板，至少建议保留两个文件：一个是真实可填写的 \texttt{main.tex}，另一个就是这类“按模板样式写成的说明文档”。前者负责直接使用，后者负责降低上手成本。若你还想进一步做成更像官方模板的形式，可以再补一个“空白版示例”文件，里面只保留骨架与占位提示。
+\end{reply}
+
+\subsection*{3. 提交前建议检查什么？}
+
+\begin{reply}
+建议逐项检查：Reviewer 编号是否一致；意见编号是否连续；文中是否还残留旧页码；引用表中的位置描述是否与最新版论文一致；所有蓝色回复是否都明确写出了“修改内容 + 论文位置”；PDF 页码是否位于底部中间；以及是否存在明显 overfull 导致的版面问题。这个检查流程对正式投稿很有帮助。
+\end{reply}
+
+\section*{五、一个最小可复用骨架}
+
+\subsection*{1. 如果只想快速复制一套最小结构，应该保留哪些部分？}
+
+\begin{reply}
+最小可复用骨架建议至少保留以下部分：导言区的版式设置；顶部 \texttt{\textbackslash defref / \textbackslash rcite} 机制；\texttt{reply} 环境；开头致谢；Reviewer 分节；结尾落款。换句话说，如果你把 \texttt{main.tex} 中的真实回复内容全部删掉，只保留这些结构，再填入占位提示，它就已经是一份非常接近 IEEE 或 Elsevier 官方 instruction template 风格的 response 模版了。
+\end{reply}
+
+\bigskip
+\noindent 使用建议：如果你准备把这套模版发给别人，最实用的组合通常是“一个正式可填写的 \texttt{main.tex} + 一个像本文件这样的示范说明版”。这样对方既能直接改，也能看到改出来大概会长什么样。
+
+\bigskip
+\noindent Sincerely,\\[1.5em]
+\noindent Template Maintainer
+
+\end{document}

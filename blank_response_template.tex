@@ -1,0 +1,168 @@
+% ============================================================
+%  Blank Response Letter Template
+%  Fill in the placeholders below for your own submission.
+% ============================================================
+\documentclass[11pt,a4paper,fontset=none]{ctexart}
+
+% ---------- Page geometry ----------
+\usepackage[top=2.3cm, bottom=2.3cm, left=3.17cm, right=3.17cm]{geometry}
+
+% ---------- Fonts ----------
+\setCJKmainfont{Songti SC}
+\setmainfont{Times New Roman}
+
+% ---------- Line spacing ----------
+\usepackage{setspace}
+\singlespacing
+
+% ---------- Paragraph formatting ----------
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\raggedbottom
+
+% ---------- Page number ----------
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ---------- Colors ----------
+\usepackage{xcolor}
+\definecolor{replyblue}{RGB}{0,102,255}
+\definecolor{refcolor}{RGB}{0,102,255}
+
+% ---------- Section / Subsection formatting ----------
+\usepackage{titlesec}
+\titleformat{\section}
+  {\normalfont\fontsize{11pt}{13.2pt}\bfseries}
+  {}{0pt}{}
+\titlespacing*{\section}{0pt}{13.2pt}{6.6pt}
+
+\titleformat{\subsection}
+  {\normalfont\fontsize{11pt}{13.2pt}\itshape}
+  {}{0pt}{}
+\titlespacing*{\subsection}{0pt}{13.2pt}{13.2pt}
+
+% ---------- Reference system ----------
+% \defref{label}{display-text}  — define a reference
+% \rcite{label}                 — cite it (bold + colored)
+% WARNING: \rcite now produces a FATAL ERROR if the reference is undefined
+\makeatletter
+\newwrite\refcheck@stream
+\immediate\openout\refcheck@stream=\jobname.refcheck
+\newcommand{\defref}[2]{%
+  \expandafter\gdef\csname ref@#1\endcsname{#2}%
+}
+\DeclareRobustCommand{\rcite}[1]{%
+  \ifcsname ref@#1\endcsname
+    \immediate\write\refcheck@stream{Defined: #1}%
+    \textbf{\csname ref@#1\endcsname}%
+  \else
+    \immediate\write\refcheck@stream{UNDEFINED REF: #1}%
+    \PackageError{response letter}{Undefined reference '#1' — add \string\defref\{#1\}\{...\} to reference table}{}%
+  \fi
+}
+\makeatother
+
+% ---------- Reply environment ----------
+\newenvironment{reply}{%
+  \par\vspace{2pt}%
+  \color{replyblue}%
+  \noindent\textbf{Reply:} %
+  \ignorespaces
+}{\par\vspace{2pt}}
+
+% ---------- Math / symbol helpers ----------
+\usepackage{amsmath,amssymb}
+
+\begin{document}
+
+% ============================================================
+%  REFERENCE TABLE
+%  Update these entries to match the revised manuscript.
+% ============================================================
+\defref{sec:intro}{Section I, Page X}
+\defref{sec:method}{Section II, Page X--Y}
+\defref{sec:exp}{Section III, Page X--Y}
+\defref{fig:overview}{Figure X, Page Y}
+\defref{tab:main}{Table X, Page Y}
+
+Dear Editor and Reviewers:
+
+We sincerely thank you for the insightful feedback. We have carefully revised the manuscript and provide our point-by-point responses below.
+
+
+% ============================================================
+\section*{Response to Reviewer \#1}
+% ============================================================
+
+\subsection*{1. [Paste the first comment from Reviewer \#1 here.]}
+
+\begin{reply}
+Thank you for your valuable comment. We have revised the manuscript accordingly.
+
+Please describe:
+
+1. What concern the reviewer raised.
+
+2. What changes you made in the revised manuscript.
+
+3. Where the changes can be found, for example: \rcite{sec:method}, \rcite{fig:overview}, or \rcite{tab:main}.
+\end{reply}
+
+\subsection*{2. [Paste the second comment from Reviewer \#1 here.]}
+
+\begin{reply}
+Thank you for your valuable comment. Please replace this placeholder with your actual response.
+\end{reply}
+
+
+% ============================================================
+\section*{Response to Reviewer \#2}
+% ============================================================
+
+\subsection*{1. [Paste the first comment from Reviewer \#2 here.]}
+
+\begin{reply}
+Thank you for your valuable comment. Please replace this placeholder with your actual response.
+\end{reply}
+
+\subsection*{2. [Paste the second comment from Reviewer \#2 here.]}
+
+\begin{reply}
+Thank you for your valuable comment. Please replace this placeholder with your actual response.
+\end{reply}
+
+
+% ============================================================
+\section*{Response to Reviewer \#3}
+% ============================================================
+
+\subsection*{1. [Paste the first comment from Reviewer \#3 here.]}
+
+\begin{reply}
+Thank you for your valuable comment. Please replace this placeholder with your actual response.
+\end{reply}
+
+
+% ============================================================
+%  OPTIONAL BLOCKS
+% ============================================================
+% You may duplicate or delete any subsection/reviewer block as needed.
+% For cited references to your revised manuscript, define them at the top
+% and call them with \rcite{...} in the body text.
+
+
+% ============================================================
+%  CLOSING
+% ============================================================
+\bigskip
+\noindent We hope that the above responses and the revisions made to the manuscript adequately address all the concerns raised by the reviewers. We appreciate the opportunity to improve our work and remain at your disposal for any further questions.
+
+\bigskip
+\noindent Sincerely,\\[1.5em]
+\noindent The Authors
+
+\end{document}
